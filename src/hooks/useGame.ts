@@ -3,9 +3,10 @@ import apiClient from "../services/api-client";
 import { CanceledError } from "axios";
 
 // Interface or shape of the 'results' array property of the api response
-interface IGame {
+export interface IGame {
   id: number;
   name: string;
+  background_image: string;
 }
 
 // Interfaces Toi represent the api response
@@ -23,15 +24,17 @@ const useGames = () => {
   const [games, setGames] = useState<IGame[]>([]);
   const [error, setError] = useState("");
 
-  // Handle the cancelation To cancel a request
-  const controller = new AbortController();
-
   //
   useEffect(() => {
+    // Handle the cancelation To cancel a request
+    const controller = new AbortController();
+
+    // Fetching data - Make a request to the game API
     apiClient
       .get<IFetchGamesResponse>("/games", { signal: controller.signal })
       .then((res) => setGames(res.data.results))
       .catch((err) => {
+        // Catch the CancelError class
         if (err instanceof CanceledError) return;
         setError(err.message);
       });
