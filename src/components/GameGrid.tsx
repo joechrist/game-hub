@@ -1,35 +1,12 @@
-import { useEffect, useState } from "react";
-import apiClient from "../services/api-client";
 import { Text } from "@chakra-ui/react";
-
-// Interface or shape of the 'results' array property of the api response
-interface IGame {
-  id: number;
-  name: string;
-}
-
-// Interfaces Toi represent the api response
-interface IFetchGamesResponse {
-  count: number;
-  results: IGame[];
-}
-
+import useGames from "../hooks/useGame";
 /**
  * Main GameGrid Component
  * @returns
  */
 const GameGrid = () => {
   //
-  const [games, setGames] = useState<IGame[]>([]);
-  const [error, setError] = useState("");
-
-  //
-  useEffect(() => {
-    apiClient
-      .get<IFetchGamesResponse>("/games")
-      .then((res) => setGames(res.data.results))
-      .catch((err) => setError(err.message));
-  });
+  const { games, error } = useGames();
 
   //
   return (
